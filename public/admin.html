@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Segue-me V2 — Painel da Coordenação</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-100">
+
+  <!-- ===================== CABEÇALHO ===================== -->
+  <header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold shadow shrink-0">✝</div>
+        <div class="min-w-0">
+          <h1 class="font-bold text-slate-800 leading-tight">Segue-me V2</h1>
+          <p class="text-xs text-slate-500 truncate">Painel da Coordenação</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <span class="hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-100 text-violet-700 ring-1 ring-violet-200">Admin</span>
+        <span id="admin-email" class="hidden md:inline text-xs text-slate-500 truncate max-w-[200px]"></span>
+        <button id="btn-sair" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-semibold px-3 py-2 rounded-lg transition">
+          Sair
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8">
+
+    <div class="flex flex-wrap items-end justify-between gap-3 mb-6">
+      <div>
+        <h2 class="text-2xl font-bold text-slate-800">Fichas de Inscrição</h2>
+        <p class="text-sm text-slate-500 mt-1">Visão completa das inscrições do encontro — somente coordenação.</p>
+      </div>
+      <button id="btn-atualizar"
+              class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-sm font-medium px-4 py-2 rounded-lg transition">
+        ↻ Atualizar
+      </button>
+    </div>
+
+    <!-- ===================== CARDS DE RESUMO ===================== -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Total de fichas</p>
+        <p id="stat-total" class="mt-1 text-3xl font-bold text-slate-800">—</p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Jovens</p>
+        <p id="stat-jovens" class="mt-1 text-3xl font-bold text-indigo-600">—</p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Tio(a)s</p>
+        <p id="stat-tios" class="mt-1 text-3xl font-bold text-amber-600">—</p>
+      </div>
+    </div>
+
+    <!-- ===================== BUSCA + TABELA ===================== -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      <div class="p-4 border-b border-slate-200">
+        <input id="busca" type="search" placeholder="🔎 Buscar por nome ou e-mail…"
+               class="w-full sm:max-w-sm border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+      </div>
+
+      <p id="lista-erro" class="hidden text-sm text-red-700 bg-red-50 border-b border-red-200 px-4 py-2"></p>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-200 text-sm">
+          <thead class="bg-slate-50">
+            <tr>
+              <th class="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Nome</th>
+              <th class="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Telefone</th>
+              <th class="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Idade</th>
+              <th class="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Papel</th>
+              <th class="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">E-mail</th>
+              <th class="px-5 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">PDF</th>
+            </tr>
+          </thead>
+          <tbody id="fichas-tbody" class="divide-y divide-slate-100 text-slate-700">
+            <!-- preenchido via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <p id="lista-vazio" class="hidden text-center text-slate-500 text-sm px-4 py-10">
+        Nenhuma ficha encontrada.
+      </p>
+    </div>
+
+    <!-- ===================== INSCRIÇÕES DE CANDIDATOS ===================== -->
+    <div class="mt-10 flex flex-wrap items-end justify-between gap-3 mb-4">
+      <div>
+        <h2 class="text-2xl font-bold text-slate-800">Inscrições de Candidatos</h2>
+        <p class="text-sm text-slate-500 mt-1">
+          Pessoas que farão o encontro pela primeira vez (sem login) — com foto 3x4 e assinatura anexadas.
+        </p>
+      </div>
+      <button id="btn-atualizar-candidatos"
+              class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-sm font-medium px-4 py-2 rounded-lg transition">
+        ↻ Atualizar
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Total de candidatos</p>
+        <p id="stat-candidatos" class="mt-1 text-3xl font-bold text-slate-800">—</p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Com foto e assinatura</p>
+        <p id="stat-candidatos-completos" class="mt-1 text-3xl font-bold text-emerald-600">—</p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      <div class="p-4 border-b border-slate-200">
+        <input id="busca-candidatos" type="search" placeholder="🔎 Buscar candidato por nome ou e-mail…"
+               class="w-full sm:max-w-sm border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+      </div>
+
+      <p id="lista-erro-candidatos" class="hidden text-sm text-red-700 bg-red-50 border-b border-red-200 px-4 py-2"></p>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-200 text-sm">
+          <thead class="bg-slate-50">
+            <tr>
+              <th class="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Nome</th>
+              <th class="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Telefone</th>
+              <th class="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">E-mail</th>
+              <th class="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Igreja</th>
+              <th class="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Foto 3x4</th>
+              <th class="px-5 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Assinatura</th>
+            </tr>
+          </thead>
+          <tbody id="candidatos-tbody" class="divide-y divide-slate-100 text-slate-700">
+            <!-- preenchido via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <p id="lista-vazio-candidatos" class="hidden text-center text-slate-500 text-sm px-4 py-10">
+        Nenhuma inscrição de candidato encontrada.
+      </p>
+    </div>
+
+    <p class="text-xs text-slate-400 mt-4">
+      🔒 <strong>Proteção LGPD:</strong> "Baixar PDF", "Foto" e "Assinatura" são
+      <em>botões autenticados</em>: o painel busca o arquivo em
+      <code>/api/arquivos/</code> com o token JWT (header
+      <code>Authorization: Bearer</code>) e o abre como Blob. As pastas
+      <code>/uploads/fichas_pdf</code> e <code>/uploads/candidatos_img</code>
+      não são mais servidas publicamente — quem não estiver autenticado recebe
+      <code>401</code>/<code>403</code>.
+    </p>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

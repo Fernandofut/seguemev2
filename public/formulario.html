@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha de Equipe de Trabalho</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style type="text/tailwindcss">
+    .lbl   { @apply block text-sm font-medium text-slate-700 mb-1; }
+    .campo { @apply w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500; }
+    .pill  { @apply inline-flex px-4 py-1.5 rounded-full border border-slate-300 text-sm text-slate-600 cursor-pointer select-none transition peer-checked:bg-indigo-600 peer-checked:border-indigo-600 peer-checked:text-white; }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-100">
+
+  <!-- ===================== CABEÇALHO ===================== -->
+  <header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold shadow shrink-0">✝</div>
+        <div class="min-w-0">
+          <h1 class="font-bold text-slate-800 leading-tight">Segue-me V2</h1>
+          <p id="header-sub" class="text-xs text-slate-500 truncate">Ficha de Equipe de Trabalho</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <span id="usuario-email" class="hidden sm:inline text-xs text-slate-500 truncate max-w-[180px]"></span>
+        <button id="btn-sair" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-semibold px-3 py-2 rounded-lg transition">
+          Sair
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 py-8 pb-24">
+
+    <div class="mb-6">
+      <h2 id="titulo-ficha" class="text-2xl font-bold text-slate-800">Ficha de Equipe de Trabalho</h2>
+      <p id="subtitulo-ficha" class="text-sm text-slate-500 mt-1">
+        Preencha com atenção. Já se inscreveu antes? Pode enviar novamente — sua ficha será <strong>atualizada</strong>.
+        O PDF é gerado automaticamente pela coordenação.
+      </p>
+    </div>
+
+    <p id="form-erro" class="hidden text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2 mb-4"></p>
+
+    <form id="form-ficha" class="space-y-6" novalidate>
+
+      <!-- ============ 1. DADOS PESSOAIS (TODOS) ============ -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">👤</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Dados Pessoais</h3>
+            <p class="text-xs text-slate-500">Como a coordenação vai te encontrar</p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label class="lbl" for="nome">Nome completo <span class="text-red-500">*</span></label>
+            <input id="nome" class="campo" type="text" required placeholder="Ex.: Maria Silva Santos">
+          </div>
+          <div>
+            <label class="lbl" for="data_nascimento">Data de nascimento</label>
+            <input id="data_nascimento" class="campo" type="date">
+          </div>
+          <div>
+            <span class="lbl">Idade (automática)</span>
+            <div id="idade-valor" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm bg-slate-50 text-slate-500">—</div>
+          </div>
+          <div>
+            <label class="lbl" for="telefone">Telefone / WhatsApp</label>
+            <input id="telefone" class="campo" type="tel" placeholder="(00) 00000-0000">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="lbl" for="endereco">Endereço</label>
+            <input id="endereco" class="campo" type="text" placeholder="Rua, número, bairro, cidade">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="lbl" for="contato_emergencia">Contato de emergência (nome + telefone)</label>
+            <input id="contato_emergencia" class="campo" type="text" placeholder="Ex.: José Silva — (00) 90000-0000">
+          </div>
+          <div>
+            <label class="lbl" for="tamanho_camiseta">Tamanho da camiseta</label>
+            <select id="tamanho_camiseta" class="campo">
+              <option value="">Selecione…</option>
+              <option>PP</option>
+              <option>P</option>
+              <option>M</option>
+              <option>G</option>
+              <option>GG</option>
+              <option>GGG</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 1.1 FOTO 3x4 (TODOS) ============ -->
+      <!-- 📸 A foto é enviada para /api/fichas/foto (pasta protegida) e
+           vinculada ao PDF no POST /api/fichas. Opcional: quem não tiver
+           pode enviar depois — a ficha aceita reenvio. -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">📸</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Foto 3x4</h3>
+            <p class="text-xs text-slate-500">Aparece no topo do PDF entregue à coordenação</p>
+          </div>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:items-center gap-5">
+          <div id="foto-preview-wrap"
+               class="w-28 h-36 sm:w-32 sm:h-40 shrink-0 rounded-lg border-2 border-dashed border-slate-300 bg-slate-50 flex items-center justify-center overflow-hidden">
+            <span id="foto-preview-vazio" class="text-[10px] leading-tight text-slate-400 text-center px-2">sem foto</span>
+            <img id="foto-preview" class="hidden w-full h-full object-cover" alt="Pré-visualização da foto 3x4">
+          </div>
+          <div class="flex-1 min-w-0">
+            <label class="lbl" for="foto">Escolher foto <span class="text-slate-400 font-normal">(opcional)</span></label>
+            <input id="foto" class="campo" type="file" accept="image/jpeg,image/png">
+            <p class="text-xs text-slate-500 mt-2">
+              Formato JPEG ou PNG, até 5 MB. Recomenda-se fundo claro, sem óculos de sol.
+            </p>
+            <p id="foto-status" class="hidden text-xs mt-2"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 2. TRAJETÓRIA NO SEGUE-ME (TODOS) ============ -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">🕊️</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Trajetória no Segue-me</h3>
+            <p class="text-xs text-slate-500">Sua história com o movimento</p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="lbl" for="ano_encontro">Ano que fez o Segue-me</label>
+            <input id="ano_encontro" class="campo" type="text" placeholder="Ex.: 2022/2023">
+          </div>
+          <div>
+            <label class="lbl" for="paroquia_encontro">Qual o Segue-me (paróquia)</label>
+            <input id="paroquia_encontro" class="campo" type="text" placeholder="Ex.: Paróquia São José">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="lbl" for="segues_trabalhados">Quais Segues já trabalhou (anos)</label>
+            <input id="segues_trabalhados" class="campo" type="text" placeholder="Ex.: 2022, 2023, 2024">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="lbl" for="equipes_trabalhadas">Quais equipes trabalhou</label>
+            <input id="equipes_trabalhadas" class="campo" type="text" placeholder="Ex.: Música, Liturgia, Acolhida">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="lbl" for="ultima_equipe_servida">Última equipe que serviu</label>
+            <input id="ultima_equipe_servida" class="campo" type="text" placeholder="Ex.: Música">
+          </div>
+          <div>
+            <label class="lbl" for="ano_que_fez_segueme">Ano em que fez o Segue-me</label>
+            <input id="ano_que_fez_segueme" class="campo" type="text" placeholder="Ex.: 2022">
+          </div>
+          <div>
+            <label class="lbl" for="equipe_que_trabalhou">Equipe em que trabalhou</label>
+            <input id="equipe_que_trabalhou" class="campo" type="text" placeholder="Ex.: Música">
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 2.1 SACRAMENTOS RECEBIDOS (TODOS) ============ -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">🕊️</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Sacramentos recebidos</h3>
+            <p class="text-xs text-slate-500">Marque os sacramentos que você já recebeu</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-700">
+          <label class="flex items-center gap-2"><input type="checkbox" name="sacramento" value="Batismo" class="w-4 h-4 accent-indigo-600"> Batismo</label>
+          <label class="flex items-center gap-2"><input type="checkbox" name="sacramento" value="Crisma" class="w-4 h-4 accent-indigo-600"> Crisma</label>
+          <label class="flex items-center gap-2"><input type="checkbox" name="sacramento" value="Eucaristia" class="w-4 h-4 accent-indigo-600"> Eucaristia</label>
+          <label class="flex items-center gap-2"><input type="checkbox" name="sacramento" value="Confirmação" class="w-4 h-4 accent-indigo-600"> Confirmação</label>
+        </div>
+      </section>
+
+      <!-- ============ 3. LIDERANÇA & SERVIÇO (TODOS) ============ -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center">🧭</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Liderança &amp; Serviço</h3>
+            <p class="text-xs text-slate-500">Sua experiência e disponibilidade</p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <span class="lbl">Já serviu liderança na igreja?</span>
+            <div class="flex gap-2">
+              <label><input type="radio" name="serviu_lideranca" value="true" class="peer sr-only"><span class="pill">Sim</span></label>
+              <label><input type="radio" name="serviu_lideranca" value="false" class="peer sr-only"><span class="pill">Não</span></label>
+            </div>
+          </div>
+          <div id="row-lideranca_igreja" class="hidden sm:col-span-2">
+            <label class="lbl" for="lideranca_igreja">Qual liderança na igreja?</label>
+            <input id="lideranca_igreja" class="campo" type="text" placeholder="Ex.: coordenador(a) de grupo, catequese…">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="lbl" for="vontade_lideranca">Vontade de servir liderança</label>
+            <input id="vontade_lideranca" class="campo" type="text" placeholder="Ex.: quero coordenar a equipe de música">
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 3.1 PASTORAL — EQUIPE DE DIRIGENTES (ED) (TODOS) ============ -->
+      <!-- ⚠️ Nomenclatura oficial: "Equipe de Dirigentes" (ver Ficha.js e CAMPOS_PDF) -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-violet-100 text-violet-600 flex items-center justify-center">📋</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Equipe de Dirigentes (ED)</h3>
+            <p class="text-xs text-slate-500">Participação na pastoral da Equipe de Dirigentes</p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <span class="lbl">Já participou da Equipe de Dirigentes (ED)?</span>
+            <div class="flex gap-2">
+              <label><input type="radio" name="participou_ed" value="true" class="peer sr-only"><span class="pill">Sim</span></label>
+              <label><input type="radio" name="participou_ed" value="false" class="peer sr-only"><span class="pill">Não</span></label>
+            </div>
+          </div>
+          <div id="row-cargo_pasta_ed" class="hidden sm:col-span-2">
+            <label class="lbl" for="cargo_pasta_ed">Cargo / pasta na ED</label>
+            <input id="cargo_pasta_ed" class="campo" type="text" placeholder="Ex.: coordenador(a), secretário(a)…">
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 4. MÚSICA & TALENTO (TODOS) ============ -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center">🎶</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Música &amp; Talento</h3>
+            <p class="text-xs text-slate-500">Dados para as equipes de louvor e palestras</p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <span class="lbl">Toca instrumento?</span>
+            <div class="flex gap-2">
+              <label><input type="radio" name="possui_instrumento" value="true" class="peer sr-only"><span class="pill">Sim</span></label>
+              <label><input type="radio" name="possui_instrumento" value="false" class="peer sr-only"><span class="pill">Não</span></label>
+            </div>
+          </div>
+          <div id="row-toca_instrumento" class="hidden sm:col-span-2">
+            <label class="lbl" for="toca_instrumento">Qual instrumento?</label>
+            <input id="toca_instrumento" class="campo" type="text" placeholder="Ex.: violão, teclado…">
+          </div>
+          <div>
+            <span class="lbl">Canta?</span>
+            <div class="flex gap-2">
+              <label><input type="radio" name="canta" value="true" class="peer sr-only"><span class="pill">Sim</span></label>
+              <label><input type="radio" name="canta" value="false" class="peer sr-only"><span class="pill">Não</span></label>
+            </div>
+          </div>
+          <div>
+            <span class="lbl">Quer dar palestra?</span>
+            <div class="flex gap-2">
+              <label><input type="radio" name="quer_dar_palestra" value="true" class="peer sr-only"><span class="pill">Sim</span></label>
+              <label><input type="radio" name="quer_dar_palestra" value="false" class="peer sr-only"><span class="pill">Não</span></label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 5. SAÚDE (TODOS) ============ -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center">🩺</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Saúde</h3>
+            <p class="text-xs text-slate-500">Alergias e restrições importantes para a equipe</p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <span class="lbl">Tem alergias ou restrições?</span>
+            <div class="flex gap-2">
+              <label><input type="radio" name="tem_alergias" value="true" class="peer sr-only"><span class="pill">Sim</span></label>
+              <label><input type="radio" name="tem_alergias" value="false" class="peer sr-only"><span class="pill">Não</span></label>
+            </div>
+          </div>
+          <div id="row-alergias_restricoes" class="hidden sm:col-span-2">
+            <label class="lbl" for="alergias_restricoes">Descreva as alergias / restrições</label>
+            <textarea id="alergias_restricoes" class="campo" rows="3" placeholder="Ex.: alergia a amendoim, medicação contínua…"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 6. DADOS DO CÔNJUGE E FAMÍLIA (SOMENTE TIO) ============ -->
+      <!-- ⚠️ Nasce com class="hidden": o JS remove o hidden apenas se o
+           perfil logado for 'tio'. Para 'jovem' o bloco permanece oculto. -->
+      <section id="bloco-conjuge" class="hidden rounded-2xl border-2 border-amber-300 bg-gradient-to-br from-amber-50 to-white shadow-sm p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">💍</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Dados do Cônjuge e Família</h3>
+            <p class="text-xs text-slate-500">Bloco exclusivo para tio(a)s — informações do casal</p>
+          </div>
+          <span class="ml-auto hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 ring-1 ring-amber-200">Tio(a)</span>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="lbl" for="nome_conjuge">Nome do cônjuge</label>
+            <input id="nome_conjuge" class="campo" type="text" placeholder="Se aplicável">
+          </div>
+          <div>
+            <label class="lbl" for="idade_conjuge">Idade do cônjuge</label>
+            <input id="idade_conjuge" class="campo" type="text" inputmode="numeric" placeholder="Se aplicável">
+          </div>
+          <div>
+            <label class="lbl" for="telefone_conjuge">Telefone do cônjuge</label>
+            <input id="telefone_conjuge" class="campo" type="tel" placeholder="Se aplicável">
+          </div>
+          <div>
+            <label class="lbl" for="origem_movimento">Fizeram ECC ou são Jovens Segue-me?</label>
+            <input id="origem_movimento" class="campo" type="text" placeholder="Ex.: ECC 2019, Jovens Segue-me…">
+          </div>
+          <div>
+            <span class="lbl">Tem filhos?</span>
+            <div class="flex gap-2">
+              <label><input type="radio" name="tem_filhos" value="true" class="peer sr-only"><span class="pill">Sim</span></label>
+              <label><input type="radio" name="tem_filhos" value="false" class="peer sr-only"><span class="pill">Não</span></label>
+            </div>
+          </div>
+          <div id="row-qtd_filhos" class="hidden">
+            <label class="lbl" for="qtd_filhos">Quantos filhos?</label>
+            <input id="qtd_filhos" class="campo" type="text" inputmode="numeric" placeholder="Ex.: 2">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="lbl" for="meio_transporte">Meio de transporte</label>
+            <input id="meio_transporte" class="campo" type="text" placeholder="Ex.: carro próprio, carona, ônibus…">
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ENVIO ============ -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <button id="btn-salvar" type="submit"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition shadow-md shadow-indigo-200">
+          Salvar ficha
+        </button>
+        <p class="text-xs text-center text-slate-400 mt-3">
+          Ao salvar, a ficha é registrada no sistema e o PDF é gerado automaticamente no servidor.
+        </p>
+      </div>
+    </form>
+  </main>
+
+  <!-- ===================== MODAL DE SUCESSO ===================== -->
+  <div id="modal-sucesso" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
+      <div class="mx-auto w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-3xl mb-4">✓</div>
+      <h2 class="text-xl font-bold text-slate-800 mb-1">Ficha salva com sucesso!</h2>
+      <p class="text-sm text-slate-600 mb-2">Você já pode fechar esta página.</p>
+      <p class="text-xs text-slate-400 mb-6">
+        📄 O PDF da sua ficha foi gerado automaticamente pelo servidor e enviado à coordenação.
+      </p>
+      <button id="btn-modal-fechar"
+              class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl transition">
+        Concluir
+      </button>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/formulario.js"></script>
+</body>
+</html>

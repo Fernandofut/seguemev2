@@ -1,0 +1,45 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente (contém credenciais - nunca versionar)
+.env
+.env.*
+!.env.example
+
+# Banco de dados SQLite (artefato de runtime)
+*.sqlite
+*.sqlite3
+*.db
+*.sqlite-wal
+*.sqlite-shm
+data/
+
+# Backups locais (contêm PII — nunca versionar)
+backups/
+
+# Artefatos gerados em runtime (PDFs das fichas)
+uploads/fichas_pdf/*
+!uploads/fichas_pdf/.gitkeep
+
+# Artefatos gerados em runtime (imagens anexadas na inscrição de candidatos)
+uploads/candidatos_img/*
+!uploads/candidatos_img/.gitkeep
+
+# Artefatos gerados em runtime (foto 3x4 e assinatura da ficha de equipe)
+uploads/fichas_img/*
+!uploads/fichas_img/.gitkeep
+
+# Fotos 3x4 das fichas (dado pessoal/biométrico — NUNCA versionar)
+uploads/fichas_foto/*
+!uploads/fichas_foto/.gitkeep
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Sistema operacional / Editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Segue-me V2 — Entrar ou Criar Conta</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-100 via-slate-100 to-sky-100 flex items-center justify-center px-4 py-10">
+
+  <main class="w-full max-w-md">
+    <!-- ===================== CARTÃO PRINCIPAL ===================== -->
+    <div class="bg-white rounded-2xl shadow-xl shadow-indigo-200/50 overflow-hidden">
+      <!-- Cabeçalho / logo -->
+      <div class="px-8 pt-8 pb-6 text-center">
+        <div class="mx-auto w-14 h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg shadow-indigo-300 mb-4">
+          ✝
+        </div>
+        <h1 class="text-2xl font-bold text-slate-800">Segue-me V2</h1>
+        <p class="text-sm text-slate-500 mt-1">Inscrição para os encontros — acesse com sua conta</p>
+      </div>
+
+      <!-- Abas: Entrar | Criar Conta -->
+      <div class="px-8">
+        <div id="abas" class="grid grid-cols-2 gap-1 bg-slate-100 rounded-xl p-1" role="tablist">
+          <button id="aba-entrar" type="button" role="tab"
+                  class="py-2 text-sm font-semibold rounded-lg transition bg-white text-indigo-700 shadow">
+            Entrar
+          </button>
+          <button id="aba-criar" type="button" role="tab"
+                  class="py-2 text-sm font-semibold rounded-lg transition text-slate-500 hover:text-slate-700">
+            Criar Conta
+          </button>
+        </div>
+      </div>
+
+      <!-- ===================== FORMULÁRIO: ENTRAR ===================== -->
+      <form id="form-login" class="px-8 py-6 space-y-4">
+        <div>
+          <label for="login-email" class="block text-sm font-medium text-slate-700 mb-1">E-mail</label>
+          <input id="login-email" name="email" type="email" required autocomplete="email"
+                 class="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                 placeholder="seu@email.com">
+        </div>
+        <div>
+          <label for="login-senha" class="block text-sm font-medium text-slate-700 mb-1">Senha</label>
+          <input id="login-senha" name="senha" type="password" required autocomplete="current-password"
+                 class="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                 placeholder="••••••••">
+        </div>
+
+        <p id="login-erro" class="hidden text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2"></p>
+
+        <button id="btn-login" type="submit"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-lg transition shadow-md shadow-indigo-200">
+          Entrar
+        </button>
+
+        <p class="text-xs text-center text-slate-400 pt-1">
+          Jovens e tio(a)s acessam a ficha de inscrição; a coordenação acessa o painel.
+        </p>
+      </form>
+
+      <!-- ===================== FORMULÁRIO: CRIAR CONTA ===================== -->
+      <form id="form-registro" class="hidden px-8 py-6 space-y-4">
+        <div>
+          <label for="reg-email" class="block text-sm font-medium text-slate-700 mb-1">E-mail</label>
+          <input id="reg-email" name="email" type="email" required autocomplete="email"
+                 class="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                 placeholder="seu@email.com">
+        </div>
+        <div>
+          <label for="reg-senha" class="block text-sm font-medium text-slate-700 mb-1">Senha</label>
+          <input id="reg-senha" name="senha" type="password" required minlength="6" autocomplete="new-password"
+                 class="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                 placeholder="Mínimo de 6 caracteres">
+        </div>
+        <div>
+          <label for="reg-role" class="block text-sm font-medium text-slate-700 mb-1">Eu sou…</label>
+          <select id="reg-role" name="role"
+                  class="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="jovem" selected>Jovem — participante do encontro</option>
+            <option value="tio">Tio(a) — acompanhante / liderança</option>
+          </select>
+        </div>
+
+        <p id="registro-erro" class="hidden text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2"></p>
+        <p id="registro-sucesso" class="hidden text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2"></p>
+
+        <button id="btn-registro" type="submit"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-lg transition shadow-md shadow-indigo-200">
+          Criar minha conta
+        </button>
+      </form>
+    </div>
+
+    <!-- 📝 Inscrição pública (novos candidatos — sem login) -->
+    <a href="/inscricao.html"
+       class="mt-5 block bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-2xl px-6 py-4 shadow-lg shadow-emerald-200/60 transition group">
+      <div class="flex items-center gap-4">
+        <div class="w-11 h-11 rounded-xl bg-white/15 flex items-center justify-center text-xl shrink-0">📝</div>
+        <div class="min-w-0 text-left">
+          <p class="font-bold leading-tight">Fazer Inscrição no Encontro (Novos Candidatos)</p>
+          <p class="text-xs text-emerald-100 mt-0.5">Primeira vez no Segue-me? Preencha a ficha e anexe foto 3x4 e assinatura — sem precisar de login.</p>
+        </div>
+        <span class="ml-auto text-xl transition group-hover:translate-x-1">→</span>
+      </div>
+    </a>
+
+    <p class="text-center text-xs text-slate-400 mt-6">
+      Segue-me V2 · Fichas digitais para encontros de jovens
+    </p>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/login.js"></script>
+</body>
+</html>

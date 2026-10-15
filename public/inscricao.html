@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Segue-me V2 — Inscrição de Novos Candidatos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style type="text/tailwindcss">
+    .lbl   { @apply block text-sm font-medium text-slate-700 mb-1; }
+    .campo { @apply w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500; }
+    .pill  { @apply inline-flex px-4 py-1.5 rounded-full border border-slate-300 text-sm text-slate-600 cursor-pointer select-none transition peer-checked:bg-emerald-600 peer-checked:border-emerald-600 peer-checked:text-white; }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-100">
+
+  <!-- ===================== CABEÇALHO ===================== -->
+  <header class="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
+    <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow shrink-0">✝</div>
+        <div class="min-w-0">
+          <h1 class="font-bold text-slate-800 leading-tight">Segue-me V2</h1>
+          <p class="text-xs text-slate-500 truncate">Inscrição de Novos Candidatos</p>
+        </div>
+      </div>
+      <a href="/index.html" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-semibold px-3 py-2 rounded-lg transition shrink-0">
+        Voltar ao login
+      </a>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4 py-8 pb-24">
+
+    <div class="mb-6">
+      <h2 class="text-2xl font-bold text-slate-800">Ficha de Inscrição</h2>
+      <p class="text-sm text-slate-500 mt-1">
+        Para quem fará o encontro <strong>pela primeira vez</strong>. Preencha todos os campos, anexe a
+        <strong>foto 3x4</strong> e a <strong>assinatura</strong>. Não é necessário criar conta — a coordenação
+        entrará em contato.
+      </p>
+    </div>
+
+    <p id="form-erro" class="hidden text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2 mb-4"></p>
+
+    <form id="form-inscricao" class="space-y-6" novalidate>
+
+      <!-- ============ 1. DADOS PESSOAIS ============ -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">👤</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Dados Pessoais</h3>
+            <p class="text-xs text-slate-500">Suas informações de contato e identificação</p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label class="lbl" for="nome">Nome completo <span class="text-red-500">*</span></label>
+            <input id="nome" class="campo" type="text" required placeholder="Ex.: Pedro Henrique Souza">
+          </div>
+          <div>
+            <label class="lbl" for="telefone">Telefone / WhatsApp <span class="text-red-500">*</span></label>
+            <input id="telefone" class="campo" type="tel" required placeholder="(00) 00000-0000">
+          </div>
+          <div>
+            <label class="lbl" for="email">E-mail</label>
+            <input id="email" class="campo" type="email" placeholder="seu@email.com">
+          </div>
+          <div>
+            <label class="lbl" for="data_nascimento">Data de nascimento</label>
+            <input id="data_nascimento" class="campo" type="date">
+          </div>
+          <div>
+            <label class="lbl" for="naturalidade">Naturalidade</label>
+            <input id="naturalidade" class="campo" type="text" placeholder="Cidade / Estado onde nasceu">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="lbl" for="endereco">Endereço completo</label>
+            <input id="endereco" class="campo" type="text" placeholder="Rua, número, bairro, cidade">
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ============ 2. FAMÍLIA ============ -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center">👨‍👩‍👧</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Família</h3>
+            <p class="text-xs text-slate-500">Filiação</p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="lbl" for="nome_pai">Nome do pai</label>
+            <input id="nome_pai" class="campo" type="text" placeholder="Se aplicável">
+          </div>
+          <div>
+            <label class="lbl" for="nome_mae">Nome da mãe</label>
+            <input id="nome_mae" class="campo" type="text" placeholder="Se aplicável">
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 3. FORMAÇÃO ============ -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">🎓</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Formação</h3>
+            <p class="text-xs text-slate-500">Escolaridade e curso atual</p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="lbl" for="escolaridade">Escolaridade</label>
+            <select id="escolaridade" class="campo">
+              <option value="">Selecione…</option>
+              <option>Fundamental - Incompleto</option>
+              <option>Fundamental - Completo</option>
+              <option>Médio - Incompleto</option>
+              <option>Médio - Completo</option>
+              <option>Superior - Incompleto</option>
+              <option>Superior - Completo</option>
+              <option>Pós-graduação</option>
+            </select>
+          </div>
+          <div>
+            <label class="lbl" for="situacao">Situação</label>
+            <select id="situacao" class="campo">
+              <option value="">Selecione…</option>
+              <option>Cursando</option>
+              <option>Completo</option>
+              <option>Incompleto</option>
+            </select>
+          </div>
+          <div>
+            <label class="lbl" for="curso">Curso</label>
+            <input id="curso" class="campo" type="text" placeholder="Ex.: Administração">
+          </div>
+          <div>
+            <label class="lbl" for="instituicao">Instituição de ensino</label>
+            <input id="instituicao" class="campo" type="text" placeholder="Ex.: Universidade / Escola">
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 4. VIDA CRISTÃ ============ -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">🕊️</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Vida Cristã</h3>
+            <p class="text-xs text-slate-500">Religião, igreja e sacramentos</p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="lbl" for="religiao">Religião</label>
+            <input id="religiao" class="campo" type="text" placeholder="Ex.: Católica">
+          </div>
+          <div>
+            <label class="lbl" for="igreja_frequenta">Igreja que frequenta</label>
+            <input id="igreja_frequenta" class="campo" type="text" placeholder="Ex.: Paróquia São José">
+          </div>
+          <div class="sm:col-span-2">
+            <span class="lbl">Sacramentos recebidos</span>
+            <div class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-700">
+              <label class="flex items-center gap-2"><input type="checkbox" class="sacramento accent-emerald-600 w-4 h-4" value="Batismo"> Batismo</label>
+              <label class="flex items-center gap-2"><input type="checkbox" class="sacramento accent-emerald-600 w-4 h-4" value="Eucaristia"> Eucaristia</label>
+              <label class="flex items-center gap-2"><input type="checkbox" class="sacramento accent-emerald-600 w-4 h-4" value="Crisma"> Crisma</label>
+            </div>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="lbl" for="movimento_igreja">Movimento / pastoral de origem</label>
+            <input id="movimento_igreja" class="campo" type="text" placeholder="Ex.: Grupo de jovens, coro, catequese…">
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 5. QUEM TE CONVIDOU ============ -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center">🤝</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Quem te convidou</h3>
+            <p class="text-xs text-slate-500">Dados da pessoa que te indicou o encontro</p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="sm:col-span-2">
+            <label class="lbl" for="convidou_nome">Nome de quem te convidou</label>
+            <input id="convidou_nome" class="campo" type="text" placeholder="Ex.: Ana Paula Lima">
+          </div>
+          <div>
+            <label class="lbl" for="convidou_telefone">Telefone de quem te convidou</label>
+            <input id="convidou_telefone" class="campo" type="tel" placeholder="(00) 00000-0000">
+          </div>
+          <div>
+            <label class="lbl" for="convidou_endereco">Endereço de quem te convidou</label>
+            <input id="convidou_endereco" class="campo" type="text" placeholder="Rua, número, bairro, cidade">
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 6. DOCUMENTOS (FOTO 3x4 + ASSINATURA) ============ -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-violet-100 text-violet-600 flex items-center justify-center">📎</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Documentos</h3>
+            <p class="text-xs text-slate-500">Anexe uma foto 3x4 e a sua assinatura (JPEG ou PNG, máx. 5 MB)</p>
+          </div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="lbl" for="foto">Foto 3x4 <span class="text-red-500">*</span></label>
+            <input id="foto" type="file" accept="image/*" required
+                   class="campo file:mr-3 file:cursor-pointer file:rounded-lg file:border-0 file:bg-indigo-600 file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-white hover:file:bg-indigo-700">
+            <p id="nome-foto" class="text-xs text-slate-400 mt-1 truncate">Nenhum arquivo selecionado</p>
+          </div>
+          <div>
+            <label class="lbl" for="assinatura">Assinatura <span class="text-red-500">*</span></label>
+            <input id="assinatura" type="file" accept="image/*" required
+                   class="campo file:mr-3 file:cursor-pointer file:rounded-lg file:border-0 file:bg-indigo-600 file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-white hover:file:bg-indigo-700">
+            <p id="nome-assinatura" class="text-xs text-slate-400 mt-1 truncate">Nenhum arquivo selecionado</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 7. OBSERVAÇÕES ============ -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center">📝</div>
+          <div>
+            <h3 class="font-semibold text-slate-800">Observações</h3>
+            <p class="text-xs text-slate-500">Algo mais que a coordenação deva saber</p>
+          </div>
+        </div>
+        <textarea id="observacoes" class="campo" rows="3" placeholder="Ex.: restrições alimentares, horários, necessidades especiais…"></textarea>
+      </section>
+
+      <!-- ============ ENVIO ============ -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+        <button id="btn-enviar" type="submit"
+                class="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition shadow-md shadow-emerald-200">
+          Enviar inscrição
+        </button>
+        <p class="text-xs text-center text-slate-400 mt-3">
+          Após o envio, a coordenação analisará sua ficha e entrará em contato pelo telefone/e-mail informado.
+        </p>
+      </div>
+    </form>
+  </main>
+
+  <!-- ===================== MODAL DE SUCESSO ===================== -->
+  <div id="modal-sucesso" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
+      <div class="mx-auto w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-3xl mb-4">✓</div>
+      <h2 class="text-xl font-bold text-slate-800 mb-1">Inscrição enviada com sucesso!</h2>
+      <p class="text-sm text-slate-600 mb-2">Sua ficha e seus anexos (foto e assinatura) foram recebidos.</p>
+      <p class="text-xs text-slate-400 mb-6">
+        📞 A coordenação entrará em contato pelo telefone ou e-mail informado.
+      </p>
+      <button id="btn-modal-fechar"
+              class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5 rounded-xl transition">
+        Concluir
+      </button>
+    </div>
+  </div>
+
+  <script src="/js/inscricao.js"></script>
+</body>
+</html>
