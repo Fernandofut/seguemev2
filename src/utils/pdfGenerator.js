@@ -14,6 +14,12 @@ const { caminhoAnexoFicha } = require('./anexosFicha');
 // projeto — independe do diretório de onde o Node foi iniciado (CWD).
 const PASTA_PDFS = path.resolve(__dirname, '..', '..', 'uploads', 'fichas_pdf');
 
+// 🖼️ Logo institucional usada no topo da primeira página do PDF.
+// Arquivo servido também em /logo-segueme.png (public/).
+const CAMINHO_LOGO = path.join(__dirname, '..', '..', 'public', 'logo-segueme.png');
+const LARGURA_LOGO = 130;
+const ALTURA_LOGO = 70;
+
 /**
  * Campos da ficha exibidos no PDF, em ordem, com rótulo legível.
  */
@@ -62,6 +68,39 @@ function formatarValor(valor) {
   if (Array.isArray(valor)) return valor.length ? valor.join(', ') : '—';
   if (typeof valor === 'object') return JSON.stringify(valor);
   return String(valor);
+}
+
+/**
+ * Desenha a logo institucional centralizada no topo da página atual.
+ *
+ * ⚠️ Robustez: se o arquivo não existir ou não puder ser decodificado,
+ * NÃO derruba a geração do PDF — apenas retorna false e segue o fluxo.
+ *
+ * @param {import('pdfkit').PDFDocument} doc
+ * @returns {boolean} true se a logo foi efetivamente desenhada
+ */
+function desenharLogo(doc) {
+  if (!fs.existsSync(CAMINHO_LOGO)) return false;
+
+  const margemEsq = doc.page.margins.left;
+  const larguraUtil = doc.page.width - margemEsq - doc.page.margins.right;
+  const x = margemEsq + (larguraUtil - LARGURA_LOGO) / 2;
+  const y = doc.y;
+
+  try {
+    // fit: preserva a proporção real da imagem dentro da caixa (não distorce)
+    doc.image(CAMINHO_LOGO, x, y, {
+      fit: [LARGURA_LOGO, ALTURA_LOGO],
+      align: 'center',
+      valign: 'center',
+    });
+    doc.y = y + ALTURA_LOGO;
+    return true;
+  } catch (erro) {
+    console.warn(`⚠️ [FICHA] Logo não pôde ser desenhada no PDF: ${erro.message}`);
+    doc.y = y;
+    return false;
+  }
 }
 
 // ------------------------------------------------------------
@@ -237,6 +276,10 @@ function gerarPDF(ficha, emailUsuario) {
     const stream = fs.createWriteStream(caminhoArquivo);
 
     doc.pipe(stream);
+
+    // ---- 🖼️ Logo institucional (topo da primeira página) ----
+    desenharLogo(doc);
+    doc.moveDown(0.5);
 
     // ---- Cabeçalho ----
     doc.fontSize(22).fillColor('#1e3a8a').text('Ficha Segue-me', { align: 'center' });
